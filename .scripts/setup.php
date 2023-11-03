@@ -129,8 +129,8 @@ class Setup {
 		$this->copyFile( "{$path}/hooks/actions/init.php", "{$path}/hooks/actions/init.php" );
 		$this->copyFile( "{$path}/wp-plugin.php", "{$path}/{$this->get('pluginSlug')}.php" );
 
-		mkdir( '{$path}/.github' );
-		mkdir( '{$path}/.github/workflows' );
+		mkdir( "{$path}/.github" );
+		mkdir( "{$path}/.github/workflows" );
 
 		$this->copyFile( "{$path}/.templates/upload-artifact-on-push.yml", "{$path}/.github/workflows/upload-artifact-on-push.yml" );
 		$this->copyFile( "{$path}/.templates/upload-asset-on-release.yml", "{$path}/.github/workflows/upload-asset-on-release.yml" );
