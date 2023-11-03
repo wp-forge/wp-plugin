@@ -172,6 +172,8 @@ class Setup {
 			$this->delete( "{$path}/wp-plugin.php" );
 		}
 
+		exec( "cd {$path}" );
+
 		echo 'Plugin setup is complete!' . PHP_EOL . PHP_EOL;
 
 		if ( $isPublic ) {
