@@ -153,6 +153,7 @@ class Setup {
 
 		$this->copyFile( "{$path}/.templates/composer.json", "{$path}/composer.json" );
 		$this->delete( "{$path}/vendor" );
+		$this->delete( "{$path}/composer.lock" );
 		exec( 'composer install' );
 		exec( 'composer run i18n' );
 
