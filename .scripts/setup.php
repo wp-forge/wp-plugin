@@ -174,15 +174,13 @@ class Setup {
 			$this->delete( "{$path}/wp-plugin.php" );
 		}
 
-		exec( "cd {$path}" );
-
 		echo 'Plugin setup is complete!' . PHP_EOL . PHP_EOL;
 
 		if ( $isPublic ) {
 			echo 'Make sure to set SVN_USERNAME and SVN_PASSWORD as secrets on GitHub for SVN deployments to work properly.' . PHP_EOL . PHP_EOL;
 		}
 
-		echo 'You can now run `npm start` to start the development environment.' . PHP_EOL . PHP_EOL;
+		echo "You can now run `cd {$this->get('pluginSlug')} && npm start` to start the development environment." . PHP_EOL . PHP_EOL;
 
 	}
 
