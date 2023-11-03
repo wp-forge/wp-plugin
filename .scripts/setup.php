@@ -1,6 +1,6 @@
 <?php
 
-namespace wpscholar\WordPress\Plugin;
+namespace WP_Forge\WordPress\Plugin;
 
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
@@ -8,10 +8,25 @@ use WP_Forge\Helpers\Str;
 
 require_once dirname( __DIR__ ) . '/vendor/autoload.php';
 
+/**
+ * Class Setup
+ *
+ * @package WP_Forge\WordPress\Plugin
+ */
 class Setup {
 
+	/**
+	 * Data store.
+	 *
+	 * @var array
+	 */
 	public $data = [];
 
+	/**
+	 * Data required to generate the plugin prompts.
+	 *
+	 * @var array
+	 */
 	public $prompts = [
 		'pluginName'        => [
 			'name'     => 'plugin name',
@@ -57,6 +72,9 @@ class Setup {
 		]
 	];
 
+	/**
+	 * Setup constructor.
+	 */
 	public function __construct() {
 
 		echo 'Welcome to the WordPress plugin setup wizard!' . PHP_EOL . PHP_EOL;
@@ -65,27 +83,19 @@ class Setup {
 
 		$path = dirname( __DIR__ );
 
-		$pluginSlug = basename( $path );
-		$wpVersion  = $this->getWPVersion();
-
 		// Set known values
 		$this->set( 'currentYear', date( 'Y' ) );
 		$this->set( 'gitUserName', exec( 'git config --global user.name' ) );
 		$this->set( 'nodeVersion', $this->getNodeVersion() );
 		$this->set( 'pluginAuthor', $this->get( 'gitUserName' ) );
 		$this->set( 'pluginPhpVersion', preg_replace( '/^(\d+\.\d+).*$/', '$1', phpversion() ) );
-		$this->set( 'pluginSlug', $pluginSlug );
-		$this->set( 'pluginTextDomain', $pluginSlug );
-		$this->set( 'pluginWpVersion', preg_replace( '/^(\d+\.\d+).*$/', '$1', $wpVersion ) );
+		$this->set( 'pluginSlug', basename( $path ) );
+		$this->set( 'pluginTextDomain', basename( $path ) );
+		$this->set( 'pluginWpVersion', preg_replace( '/^(\d+\.\d+).*$/', '$1', $this->getWPVersion() ) );
 		$this->set( 'port', rand( 1000, 9998 ) );
 		$this->set( 'testPort', $this->get( 'port' ) + 1 );
 
 		// Set default values
-		$this->prompts['pluginName']['default']        = 'Micah\'s Plugin';
-		$this->prompts['pluginDescription']['default'] = 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.';
-		$this->prompts['pluginAuthorUri']['default']   = 'https://wpscholar.com/';
-		$this->prompts['pluginUri']['default']         = 'https://wpscholar.com/' . $this->get( 'pluginSlug' );
-
 		$this->prompts['pluginAuthor']['default']  = $this->get( 'gitUserName' );
 		$this->prompts['gitUser']['default']       = basename( $_SERVER['HOME'] );
 		$this->prompts['wpOrgUsername']['default'] = basename( $_SERVER['HOME'] );
@@ -99,11 +109,12 @@ class Setup {
 		}
 
 		// Set derived values
-		$this->set( 'pluginConstantPrefix', preg_replace( '/[^a-zA-Z0-9_-]/', '', strtoupper( Str::snake( strtolower( $this->get( 'pluginName' ) ) ) ) . '_' ) );
-		$this->set( 'pluginNamespace', preg_replace( '/[^a-zA-Z0-9_-]/', '', Str::studly( $this->get( 'pluginName' ) ) ) );
-		$this->set( 'pluginPackage', preg_replace( '/[^a-zA-Z0-9_-]/', '', Str::studly( $this->get( 'pluginName' ) ) ) );
+		$this->set( 'pluginConstantPrefix', $this->toAlphaNumeric( strtoupper( Str::snake( Str::lower( $this->get( 'pluginName' ) ) ) ) . '_' ) );
+		$this->set( 'pluginNamespace', $this->toAlphaNumeric( Str::studly( $this->get( 'pluginName' ) ) ) );
+		$this->set( 'pluginPackage', $this->toAlphaNumeric( Str::studly( $this->get( 'pluginName' ) ) ) );
 		$this->set( 'vendorSlug', Str::kebab( $this->get( 'vendorSlug' ) ) );
 
+		// Sort before displaying
 		ksort( $this->data );
 
 		echo PHP_EOL . 'Here is the data that will be used to generate your plugin:' . PHP_EOL;
@@ -133,6 +144,7 @@ class Setup {
 
 		echo 'Initializing Git...' . PHP_EOL . PHP_EOL;
 
+		$this->delete( "{$path}/.git" );
 		exec( 'git init' );
 
 		echo 'Setting up Composer...' . PHP_EOL . PHP_EOL;
@@ -169,24 +181,56 @@ class Setup {
 
 	}
 
+	/**
+	 * Set a value in the data store.
+	 *
+	 * @param string $key The key to set.
+	 * @param mixed $value The value to set.
+	 */
 	public function set( $key, $value ) {
 		$this->data[ $key ] = $value;
 	}
 
+	/**
+	 * Determine if a value exists in the data store.
+	 *
+	 * @param string $key The key to check.
+	 *
+	 * @return bool
+	 */
 	public function has( $key ) {
 		return isset( $this->data[ $key ] );
 	}
 
+	/**
+	 * Get a value from the data store.
+	 *
+	 * @param string $key The key to retrieve.
+	 *
+	 * @return mixed
+	 */
 	public function get( $key ) {
 		return $this->has( $key ) ? $this->data[ $key ] : null;
 	}
 
+	/**
+	 * Remove a value from the data store.
+	 *
+	 * @param string $key The key to remove.
+	 */
 	public function remove( $key ) {
 		if ( $this->has( $key ) ) {
 			unset( $this->data[ $key ] );
 		}
 	}
 
+	/**
+	 * Prompt the user for a value.
+	 *
+	 * @param string $key The key to prompt for.
+	 *
+	 * @return mixed
+	 */
 	public function prompt( $key ) {
 		$value = null;
 		if ( array_key_exists( $key, $this->prompts ) ) {
@@ -218,6 +262,12 @@ class Setup {
 		return $value;
 	}
 
+	/**
+	 * Copy a file from one location to another. Does a search and replace on placeholders.
+	 *
+	 * @param string $from The source file.
+	 * @param string $to The destination file.
+	 */
 	public function copyFile( $from, $to ) {
 		$contents = file_get_contents( $from );
 
@@ -237,6 +287,11 @@ class Setup {
 		file_put_contents( $to, $contents );
 	}
 
+	/**
+	 * Delete a file or directory.
+	 *
+	 * @param string $path The path to delete.
+	 */
 	public function delete( $path ) {
 		if ( is_dir( $path ) ) {
 			$iterator = new RecursiveDirectoryIterator( $path, RecursiveDirectoryIterator::SKIP_DOTS );
@@ -255,6 +310,11 @@ class Setup {
 		}
 	}
 
+	/**
+	 * Determine if the plugin will be publicly released.
+	 *
+	 * @return bool
+	 */
 	public function isPublic() {
 		$isPublic = '';
 		while ( strtolower( $isPublic ) !== 'y' && strtolower( $isPublic ) !== 'n' ) {
@@ -267,6 +327,26 @@ class Setup {
 		return strtolower( $isPublic ) === 'y';
 	}
 
+	/**
+	 * Convert a string to alphanumeric characters.
+	 *
+	 * @param string $string The string to convert.
+	 * @param string $extraChars Additional characters to allow.
+	 *
+	 * @return string
+	 */
+	public function toAlphaNumeric( $string, $extraChars = '-_' ) {
+		$pattern = preg_quote( '/[^a-zA-Z0-9' . $extraChars . ']/', '/' );
+
+		return preg_replace( $pattern, '', $string );
+
+	}
+
+	/**
+	 * Get the version of WordPress installed on the system.
+	 *
+	 * @return string
+	 */
 	function getWPVersion() {
 		$wpVersion = '';
 		$response  = file_get_contents( 'https://api.wordpress.org/core/stable-check/1.0/' );
@@ -278,6 +358,11 @@ class Setup {
 		return $wpVersion;
 	}
 
+	/**
+	 * Get the version of Node installed on the system.
+	 *
+	 * @return string
+	 */
 	function getNodeVersion() {
 		$version = exec( 'node -v' );
 		if ( $version ) {
