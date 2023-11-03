@@ -155,13 +155,6 @@ class Setup {
 		exec( 'git init' );
 		exec( 'git branch -m main' );
 
-		echo PHP_EOL . 'Setting up Composer...' . PHP_EOL;
-
-		$this->copyFile( "{$path}/.templates/composer.json", "{$path}/composer.json" );
-		$this->delete( "{$path}/vendor" );
-		$this->delete( "{$path}/composer.lock" );
-		exec( 'composer install' );
-
 		echo PHP_EOL . 'Setting up NPM...' . PHP_EOL;
 
 		$this->copyFile( "{$path}/.nvmrc", "{$path}/.nvmrc" );
@@ -169,6 +162,13 @@ class Setup {
 		$this->delete( "{$path}/node_modules" );
 		$this->delete( "{$path}/package-lock.json" );
 		exec( 'npm install' );
+
+		echo PHP_EOL . 'Setting up Composer...' . PHP_EOL;
+
+		$this->copyFile( "{$path}/.templates/composer.json", "{$path}/composer.json" );
+		$this->delete( "{$path}/vendor" );
+		$this->delete( "{$path}/composer.lock" );
+		exec( 'composer install' );
 
 		echo PHP_EOL . 'Cleaning up...' . PHP_EOL;
 
