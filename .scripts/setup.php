@@ -135,7 +135,6 @@ class Setup {
 		$this->copyFile( "{$path}/hooks/actions/init.php", "{$path}/hooks/actions/init.php" );
 		$this->copyFile( "{$path}/wp-plugin.php", "{$path}/{$this->get('pluginSlug')}.php" );
 
-		mkdir( "{$path}/.github" );
 		mkdir( "{$path}/.github/workflows" );
 
 		$this->copyFile( "{$path}/.templates/upload-artifact-on-push.yml", "{$path}/.github/workflows/upload-artifact-on-push.yml" );
@@ -153,12 +152,6 @@ class Setup {
 			$this->delete( "{$path}/wp-plugin.php" );
 		}
 
-		echo PHP_EOL . 'Initializing Git...' . PHP_EOL;
-
-		$this->delete( "{$path}/.git" );
-		exec( 'git init' );
-		exec( 'git branch -m main' );
-
 		echo PHP_EOL . 'Setting up NPM...' . PHP_EOL;
 
 		$this->copyFile( "{$path}/.nvmrc", "{$path}/.nvmrc" );
@@ -174,6 +167,15 @@ class Setup {
 		$this->delete( "{$path}/composer.lock" );
 		exec( 'composer install' );
 
+		echo PHP_EOL . 'Initializing Git...' . PHP_EOL;
+
+		$this->delete( "{$path}/.git" );
+
+		chdir( $path );
+		exec( 'git init' );
+		exec( 'git branch -m main' );
+		exec( "git commit -am 'Initial commit'" );
+
 		echo PHP_EOL . 'Cleaning up...' . PHP_EOL;
 
 		$this->delete( "{$path}/.templates" );
@@ -184,6 +186,9 @@ class Setup {
 		if ( $isPublic ) {
 			echo 'Make sure to set SVN_USERNAME and SVN_PASSWORD as secrets on GitHub for SVN deployments to work properly.' . PHP_EOL . PHP_EOL;
 		}
+
+		echo 'Run `git remote add origin [url]` to add your GitHub repo URL.' . PHP_EOL;
+		echo 'Run `git push -u origin main` to push your code.' . PHP_EOL . PHP_EOL;
 
 		echo "You can now run `cd {$this->get('pluginSlug')} && npm start` to start the development environment." . PHP_EOL;
 

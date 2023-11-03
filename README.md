@@ -54,3 +54,4 @@ Don't forget to:
 - Run `git remote add origin <url>` to add your remote repository
 - Add a `SVN_USERNAME` and `SVN_PASSWORD` environment variable to your GitHub repository settings (if your plugin is to
   be publicly released)
+- Push your code to GitHub by running `git push -u origin master`
