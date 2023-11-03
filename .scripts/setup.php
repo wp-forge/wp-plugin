@@ -126,6 +126,7 @@ class Setup {
 		$this->copyFile( "{$path}/.wp-env.json", "{$path}/.wp-env.json" );
 		$this->copyFile( "{$path}/.templates/README.md", "{$path}/README.md" );
 		$this->copyFile( "{$path}/readme.txt", "{$path}/readme.txt" );
+		$this->copyFile( "{$path}/hooks/actions/init.php", "{$path}/hooks/actions/init.php" );
 		$this->copyFile( "{$path}/wp-plugin.php", "{$path}/{$this->get('pluginSlug')}.php" );
 
 		mkdir( '{$path}/.github' );
