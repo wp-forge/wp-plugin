@@ -147,6 +147,7 @@ class Setup {
 
 		$this->delete( "{$path}/.git" );
 		exec( 'git init' );
+		exec( 'git branch -m main' );
 
 		echo 'Setting up Composer...' . PHP_EOL . PHP_EOL;
 
@@ -339,9 +340,7 @@ class Setup {
 	 * @return string
 	 */
 	public function toAlphaNumeric( $string, $extraChars = '-_' ) {
-		$pattern = preg_quote( '/[^a-zA-Z0-9' . $extraChars . ']/', '/' );
-
-		return preg_replace( $pattern, '', $string );
+		return preg_replace( '/[^a-zA-Z0-9' . $extraChars . ']/', '', $string );
 
 	}
 
