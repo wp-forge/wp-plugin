@@ -6,6 +6,7 @@
     "Micah Wood (https://wpscholar.com)"
   ],
   "scripts": {
+    "build": "echo \"No build script specified\"",
     "start": "wp-env start",
     "i18n": "wpi18n addtextdomain && composer run i18n",
     "log:watch": "wp-env run wordpress 'tail -f /var/www/html/wp-content/debug.log'",
