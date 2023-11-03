@@ -149,6 +149,10 @@ class Setup {
 			$this->delete( "{$path}/readme.txt" );
 		}
 
+		if ( $this->get( 'pluginSlug' ) !== 'wp-plugin.php' ) {
+			$this->delete( "{$path}/wp-plugin.php" );
+		}
+
 		echo PHP_EOL . 'Initializing Git...' . PHP_EOL;
 
 		$this->delete( "{$path}/.git" );
@@ -174,10 +178,6 @@ class Setup {
 
 		$this->delete( "{$path}/.templates" );
 		$this->delete( "{$path}/.scripts" );
-
-		if ( $this->get( 'pluginSlug' ) !== 'wp-plugin.php' ) {
-			$this->delete( "{$path}/wp-plugin.php" );
-		}
 
 		echo PHP_EOL . 'Plugin setup is complete!' . PHP_EOL . PHP_EOL;
 
