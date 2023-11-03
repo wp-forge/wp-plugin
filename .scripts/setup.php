@@ -161,7 +161,6 @@ class Setup {
 		$this->delete( "{$path}/vendor" );
 		$this->delete( "{$path}/composer.lock" );
 		exec( 'composer install' );
-		exec( 'composer run i18n' );
 
 		echo 'Setting up NPM...' . PHP_EOL . PHP_EOL;
 
