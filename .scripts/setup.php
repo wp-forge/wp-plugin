@@ -127,8 +127,8 @@ class Setup {
 			$this->copyFile( "{$path}/.templates/svn-deploy-assets-on-push.yml", "{$path}/.github/workflows/svn-deploy-assets-on-push.yml" );
 			$this->copyFile( "{$path}/.templates/svn-deploy-plugin-on-release.yml", "{$path}/.github/workflows/svn-deploy-plugin-on-release.yml" );
 		} else {
-			$this->deleteFolder( "{$path}/.wporg" );
-			$this->deleteFile( "{$path}/readme.txt" );
+			$this->delete( "{$path}/.wporg" );
+			$this->delete( "{$path}/readme.txt" );
 		}
 
 		echo 'Initializing Git...' . PHP_EOL . PHP_EOL;
@@ -138,7 +138,7 @@ class Setup {
 		echo 'Setting up Composer...' . PHP_EOL . PHP_EOL;
 
 		$this->copyFile( "{$path}/.templates/composer.json", "{$path}/composer.json" );
-		$this->deleteFolder( "{$path}/vendor" );
+		$this->delete( "{$path}/vendor" );
 		exec( 'composer install' );
 		exec( 'composer run i18n' );
 
@@ -146,16 +146,17 @@ class Setup {
 
 		$this->copyFile( "{$path}/.nvmrc", "{$path}/.nvmrc" );
 		$this->copyFile( "{$path}/package.json", "{$path}/package.json" );
-		$this->deleteFolder( "{$path}/node_modules" );
+		$this->delete( "{$path}/node_modules" );
+		$this->delete( "{$path}/package-lock.json" );
 		exec( 'npm install' );
 
 		echo 'Cleaning up...' . PHP_EOL . PHP_EOL;
 
-		$this->deleteFolder( "{$path}/.templates" );
-		$this->deleteFolder( "{$path}/.scripts" );
+		$this->delete( "{$path}/.templates" );
+		$this->delete( "{$path}/.scripts" );
 
 		if ( $this->get( 'pluginSlug' ) !== 'wp-plugin.php' ) {
-			$this->deleteFile( "{$path}/wp-plugin.php" );
+			$this->delete( "{$path}/wp-plugin.php" );
 		}
 
 		echo 'Plugin setup is complete!' . PHP_EOL . PHP_EOL;
@@ -180,7 +181,7 @@ class Setup {
 		return $this->has( $key ) ? $this->data[ $key ] : null;
 	}
 
-	public function delete( $key ) {
+	public function remove( $key ) {
 		if ( $this->has( $key ) ) {
 			unset( $this->data[ $key ] );
 		}
@@ -236,13 +237,7 @@ class Setup {
 		file_put_contents( $to, $contents );
 	}
 
-	public function deleteFile( $path ) {
-		if ( file_exists( $path ) ) {
-			unlink( $path );
-		}
-	}
-
-	public function deleteFolder( $path ) {
+	public function delete( $path ) {
 		if ( is_dir( $path ) ) {
 			$iterator = new RecursiveDirectoryIterator( $path, RecursiveDirectoryIterator::SKIP_DOTS );
 			$files    = new RecursiveIteratorIterator( $iterator, RecursiveIteratorIterator::CHILD_FIRST );
@@ -254,6 +249,9 @@ class Setup {
 				}
 			}
 			rmdir( $path );
+		}
+		if ( is_file( $path ) ) {
+			unlink( $path );
 		}
 	}
 
