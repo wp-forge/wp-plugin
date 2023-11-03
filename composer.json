@@ -1,0 +1,23 @@
+{
+  "name": "wpscholar/wp-plugin",
+  "description": "Create a new WordPress plugin via Composer",
+  "type": "wordpress-plugin",
+  "license": "GPL-2.0-or-later",
+  "authors": [
+    {
+      "name": "Micah Wood",
+      "homepage": "https://wpscholar.com"
+    }
+  ],
+  "scripts": {
+    "post-create-project-cmd": [
+      "@php .scripts/setup.php"
+    ]
+  },
+  "require": {
+    "php": ">=7.4",
+    "ext-curl": "*",
+    "ext-readline": "*",
+    "wp-forge/helpers": "^2.0"
+  }
+}

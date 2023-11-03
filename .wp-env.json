@@ -1,0 +1,25 @@
+{
+  "core": null,
+  "plugins": [
+    "."
+  ],
+  "phpVersion": "%%pluginPhpVersion%%",
+  "port": %%port%%,
+  "testsPort": %%testPort%%,
+  "config": {
+    "WP_DEBUG": true,
+    "WP_DEBUG_LOG": true,
+    "WP_DEBUG_DISPLAY": false,
+    "FS_METHOD": "direct"
+  },
+  "env": {
+    "tests": {
+      "config": {
+        "WP_SITEURL": "localhost:%%testPort%%",
+        "WP_TESTS_DOMAIN": "localhost:%%testPort%%",
+        "WP_TESTS_TITLE": "%%pluginName%%",
+        "WP_TESTS_BINARY": "php"
+      }
+    }
+  }
+}

@@ -1,0 +1,21 @@
+# Mac
+.DS_Store
+
+# PHPStorm
+.idea/
+
+# VSCode
+.vscode/
+
+# Compiled files
+/assets/css
+/assets/js
+
+# Node
+/node_modules
+
+# Composer
+/vendor
+
+# WP-CLI
+wp-cli.local.yml

@@ -1,0 +1,24 @@
+{
+  "description": "%%pluginDescription%%",
+  "license": "GPL-2.0-or-later",
+  "private": true,
+  "contributors": [
+    "Micah Wood (https://wpscholar.com)"
+  ],
+  "scripts": {
+    "start": "wp-env start",
+    "i18n": "wpi18n addtextdomain && composer run i18n",
+    "log:watch": "wp-env run wordpress 'tail -f /var/www/html/wp-content/debug.log'",
+    "wp:start": "wp-env start",
+    "wp:stop": "wp-env stop",
+    "wp:logs": "wp-env logs development"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git"
+  },
+  "devDependencies": {
+    "@wordpress/env": "*",
+    "@wordpress/i18n": "^4.45.0"
+  }
+}

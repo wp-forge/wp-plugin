@@ -1,0 +1,24 @@
+### This file is used by our rsync commands to exclude certain files and folders from being deployed.
+
+# File Types
+/.*
+/*.lock
+/*.log
+/*.sql
+/*.tar.gz
+/*.xml
+/*.yml
+/*.zip
+
+# Directories
+/node_modules
+/source
+/tests
+/vendor
+
+# Files
+composer.json
+package.json
+package-lock.json
+wp-cli.local.yml
+webpack.config.js

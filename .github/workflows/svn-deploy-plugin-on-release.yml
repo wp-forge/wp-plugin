@@ -1,0 +1,63 @@
+name: Deploy to WordPress.org
+on:
+  release:
+    types:
+      - published
+      - edited
+
+jobs:
+  deploy:
+    name: On Release
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Set Package Name
+        id: package
+        env:
+          REPO: ${{ github.repository }}
+        run: echo "PACKAGE=${REPO##*/}" >> $GITHUB_OUTPUT
+
+      - name: PHP version
+        run: php --version
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Node version
+        run: node --version
+
+      - name: Install node dependencies
+        run: npm install
+
+      - name: Run build
+        run: npm run build
+
+      - name: Validate composer.json and composer.lock
+        run: composer validate
+
+      - name: Get Composer Cache Directory
+        id: composer-cache
+        run: echo "::set-output name=dir::$(composer config cache-files-dir)"
+
+      - name: Cache Composer vendor directory
+        uses: actions/cache@v3
+        with:
+          path: ${{ steps.composer-cache.outputs.dir }}
+          key: ${{ runner.os }}-composer-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-composer-
+
+      - name: Install PHP Dependencies
+        run: composer install --no-dev --no-progress --no-interaction --no-suggest --optimize-autoloader
+
+      - name: WordPress Plugin Deploy
+        uses: 10up/action-wordpress-plugin-deploy@master
+        env:
+          SVN_PASSWORD: ${{ secrets.SVN_PASSWORD }}
+          SVN_USERNAME: ${{ secrets.SVN_USERNAME }}
+          ASSETS_DIR: .wporg

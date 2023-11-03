@@ -1,0 +1,3 @@
+### This file is used by our rsync commands to include certain files and folders in a deployment, regardless of whether they are in the .distignore file or not.
+
+.htaccess

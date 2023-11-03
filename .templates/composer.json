@@ -1,0 +1,49 @@
+{
+  "name": "%%vendorSlug%%/%%pluginSlug%%",
+  "description": "%%pluginDescription%%",
+  "type": "wordpress-plugin",
+  "license": "GPL-2.0-or-later",
+  "autoload": {
+    "psr-4": {
+      "%%vendorSlug%%\\%%pluginNamespace%%\\": "includes/"
+    },
+    "files": [
+      "includes/functions.php"
+    ]
+  },
+  "authors": [
+    {
+      "name": "%%pluginAuthor%%",
+      "homepage": "%%pluginAuthorUri%%"
+    }
+  ],
+  "config": {
+    "optimize-autoloader": true,
+    "sort-packages": true,
+    "platform": {
+      "php": "%%pluginPhpVersion%%"
+    },
+    "platform-check": false
+  },
+  "scripts": {
+    "i18n": [
+      "vendor/bin/wp i18n make-pot . ./languages/%%pluginSlug%%.pot --headers='{\"POT-Creation-Date\":null}' --exclude=assets"
+    ],
+    "post-install-cmd": [
+      "@i18n"
+    ],
+    "post-update-cmd": [
+      "@i18n"
+    ]
+  },
+  "scripts-descriptions": {
+    "i18n": "Generate a .pot file for translation."
+  },
+  "require": {
+    "php": ">=%%pluginPhpVersion%%"
+  },
+  "require-dev": {
+    "roave/security-advisories": "dev-latest",
+    "wp-cli/wp-cli-bundle": "@stable"
+  }
+}
