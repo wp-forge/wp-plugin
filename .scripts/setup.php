@@ -117,9 +117,16 @@ class Setup {
 		$this->copyFile( "{$path}/readme.txt", "{$path}/readme.txt" );
 		$this->copyFile( "{$path}/wp-plugin.php", "{$path}/{$this->get('pluginSlug')}.php" );
 
-		if ( ! $isPublic ) {
-			$this->deleteFolder( "{$path}/.github/workflows/svn-deploy-assets-on-push.yml" );
-			$this->deleteFolder( "{$path}/.github/workflows/svn-deploy-plugin-on-release.yml" );
+		mkdir( '{$path}/.github' );
+		mkdir( '{$path}/.github/workflows' );
+
+		$this->copyFile( "{$path}/.templates/upload-artifact-on-push.yml", "{$path}/.github/workflows/upload-artifact-on-push.yml" );
+		$this->copyFile( "{$path}/.templates/upload-asset-on-release.yml", "{$path}/.github/workflows/upload-asset-on-release.yml" );
+
+		if ( $isPublic ) {
+			$this->copyFile( "{$path}/.templates/svn-deploy-assets-on-push.yml", "{$path}/.github/workflows/svn-deploy-assets-on-push.yml" );
+			$this->copyFile( "{$path}/.templates/svn-deploy-plugin-on-release.yml", "{$path}/.github/workflows/svn-deploy-plugin-on-release.yml" );
+		} else {
 			$this->deleteFolder( "{$path}/.wporg" );
 			$this->deleteFile( "{$path}/readme.txt" );
 		}
