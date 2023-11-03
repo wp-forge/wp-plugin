@@ -101,6 +101,12 @@ class Setup {
 		$this->prompts['wpOrgUsername']['default'] = basename( $_SERVER['HOME'] );
 		$this->prompts['vendorSlug']['default']    = basename( $_SERVER['HOME'] );
 
+		if ( $isPublic ) {
+			$this->prompts['pluginUri']['default'] = 'https://wordpress.org/plugins/' . $this->get( 'pluginSlug' ) . '/';
+		} else {
+			$this->prompts['pluginUri']['required'] = false;
+		}
+
 		// Request unknown values
 		foreach ( $this->prompts as $key => $value ) {
 			if ( empty( $this->get( $key ) ) ) {
