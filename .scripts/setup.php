@@ -127,7 +127,7 @@ class Setup {
 
 		echo json_encode( $this->data, JSON_PRETTY_PRINT ) . PHP_EOL . PHP_EOL;
 
-		echo 'Generating plugin...' . PHP_EOL . PHP_EOL;
+		echo 'Generating plugin...' . PHP_EOL;
 
 		$this->copyFile( "{$path}/.wp-env.json", "{$path}/.wp-env.json" );
 		$this->copyFile( "{$path}/.templates/README.md", "{$path}/README.md" );
@@ -149,20 +149,20 @@ class Setup {
 			$this->delete( "{$path}/readme.txt" );
 		}
 
-		echo 'Initializing Git...' . PHP_EOL . PHP_EOL;
+		echo PHP_EOL . 'Initializing Git...' . PHP_EOL;
 
 		$this->delete( "{$path}/.git" );
 		exec( 'git init' );
 		exec( 'git branch -m main' );
 
-		echo 'Setting up Composer...' . PHP_EOL . PHP_EOL;
+		echo PHP_EOL . 'Setting up Composer...' . PHP_EOL;
 
 		$this->copyFile( "{$path}/.templates/composer.json", "{$path}/composer.json" );
 		$this->delete( "{$path}/vendor" );
 		$this->delete( "{$path}/composer.lock" );
 		exec( 'composer install' );
 
-		echo 'Setting up NPM...' . PHP_EOL . PHP_EOL;
+		echo PHP_EOL . 'Setting up NPM...' . PHP_EOL;
 
 		$this->copyFile( "{$path}/.nvmrc", "{$path}/.nvmrc" );
 		$this->copyFile( "{$path}/package.json", "{$path}/package.json" );
@@ -170,7 +170,7 @@ class Setup {
 		$this->delete( "{$path}/package-lock.json" );
 		exec( 'npm install' );
 
-		echo 'Cleaning up...' . PHP_EOL . PHP_EOL;
+		echo PHP_EOL . 'Cleaning up...' . PHP_EOL;
 
 		$this->delete( "{$path}/.templates" );
 		$this->delete( "{$path}/.scripts" );
@@ -179,13 +179,13 @@ class Setup {
 			$this->delete( "{$path}/wp-plugin.php" );
 		}
 
-		echo 'Plugin setup is complete!' . PHP_EOL . PHP_EOL;
+		echo PHP_EOL . 'Plugin setup is complete!' . PHP_EOL . PHP_EOL;
 
 		if ( $isPublic ) {
 			echo 'Make sure to set SVN_USERNAME and SVN_PASSWORD as secrets on GitHub for SVN deployments to work properly.' . PHP_EOL . PHP_EOL;
 		}
 
-		echo "You can now run `cd {$this->get('pluginSlug')} && npm start` to start the development environment." . PHP_EOL . PHP_EOL;
+		echo "You can now run `cd {$this->get('pluginSlug')} && npm start` to start the development environment." . PHP_EOL;
 
 	}
 
