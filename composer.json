@@ -1,5 +1,5 @@
 {
-  "name": "wpscholar/wp-plugin",
+  "name": "wp-forge/wp-plugin",
   "description": "Create a new WordPress plugin via Composer",
   "type": "wordpress-plugin",
   "license": "GPL-2.0-or-later",
