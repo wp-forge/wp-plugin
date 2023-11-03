@@ -21,7 +21,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.2'
+          php-version: '%%phpVersion%%'
           coverage: none
           tools: composer, cs2pr
 
@@ -38,7 +38,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: %%nodeVersion%%
           cache: 'npm'
 
       - name: Get Composer cache directory
