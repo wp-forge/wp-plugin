@@ -3,7 +3,7 @@
   "license": "GPL-2.0-or-later",
   "private": true,
   "contributors": [
-    "Micah Wood (https://wpscholar.com)"
+    "%%pluginAuthor%% (%%pluginAuthorUri%%)"
   ],
   "scripts": {
     "build": "echo \"No build script specified\"",
