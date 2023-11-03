@@ -20,6 +20,6 @@
   },
   "devDependencies": {
     "@wordpress/env": "*",
-    "@wordpress/i18n": "^4.45.0"
+    "@wordpress/i18n": "*"
   }
 }
