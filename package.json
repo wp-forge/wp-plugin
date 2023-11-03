@@ -7,7 +7,7 @@
   ],
   "scripts": {
     "build": "echo \"No build script specified\"",
-    "start": "wp-env start",
+    "start": "wp-env start && npm run build",
     "i18n": "wpi18n addtextdomain && composer run i18n",
     "log:watch": "wp-env run wordpress 'tail -f /var/www/html/wp-content/debug.log'",
     "wp:start": "wp-env start",
