@@ -24,7 +24,7 @@ jobs:
       - name: Setup PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '%%phpVersion%%'
+          php-version: '%%pluginPhpVersion%%'
           coverage: none
           tools: composer, cs2pr
 
