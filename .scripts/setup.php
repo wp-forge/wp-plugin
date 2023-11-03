@@ -112,10 +112,7 @@ class Setup {
 
 		echo 'Generating plugin...' . PHP_EOL . PHP_EOL;
 
-		$this->copyFile( "{$path}/.nvmrc", "{$path}/.nvmrc" );
 		$this->copyFile( "{$path}/.wp-env.json", "{$path}/.wp-env.json" );
-		$this->copyFile( "{$path}/.templates/composer.json", "{$path}/composer.json" );
-		$this->copyFile( "{$path}/package.json", "{$path}/package.json" );
 		$this->copyFile( "{$path}/.templates/README.md", "{$path}/README.md" );
 		$this->copyFile( "{$path}/readme.txt", "{$path}/readme.txt" );
 		$this->copyFile( "{$path}/wp-plugin.php", "{$path}/{$this->get('pluginSlug')}.php" );
@@ -133,11 +130,16 @@ class Setup {
 
 		echo 'Setting up Composer...' . PHP_EOL . PHP_EOL;
 
+		$this->copyFile( "{$path}/.templates/composer.json", "{$path}/composer.json" );
+		$this->deleteFolder( "{$path}/vendor" );
 		exec( 'composer install' );
 		exec( 'composer run i18n' );
 
 		echo 'Setting up NPM...' . PHP_EOL . PHP_EOL;
 
+		$this->copyFile( "{$path}/.nvmrc", "{$path}/.nvmrc" );
+		$this->copyFile( "{$path}/package.json", "{$path}/package.json" );
+		$this->deleteFolder( "{$path}/node_modules" );
 		exec( 'npm install' );
 
 		echo 'Cleaning up...' . PHP_EOL . PHP_EOL;
